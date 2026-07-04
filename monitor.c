@@ -61,6 +61,7 @@ void	*monitor_routine(void *arg)
 	long long	now;
 
 	data = (t_data *)arg;
+	wait_for_simulation_start(data);
 	while (1)
 	{
 		if (has_simulation_stopped(data))

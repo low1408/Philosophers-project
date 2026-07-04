@@ -58,6 +58,7 @@ int	parse_args(t_data *data, int argc, char **argv)
 static int	launch_simulation(t_data *data)
 {
 	int			i;
+	long long	start_time;
 	pthread_t	monitor;
 
 	i = 0;
@@ -87,12 +88,15 @@ static int	launch_simulation(t_data *data)
 			pthread_join(data->philos[i].thread_id, NULL);
 		return (1);
 	}
-	data->start_time = get_time_in_ms();
+	start_time = get_time_in_ms();
+	pthread_mutex_lock(&data->stop_mutex);
+	data->start_time = start_time;
+	pthread_mutex_unlock(&data->stop_mutex);
 	i = 0;
 	while (i < data->num_philos)
 	{
 		pthread_mutex_lock(&data->philos[i].state_mutex);
-		data->philos[i].last_meal_time = data->start_time;
+		data->philos[i].last_meal_time = start_time;
 		pthread_mutex_unlock(&data->philos[i].state_mutex);
 		i++;
 	}

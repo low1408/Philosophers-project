@@ -50,14 +50,9 @@ void	*philosopher_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	pthread_mutex_lock(&data->stop_mutex);
-	while (!data->simulation_started)
-	{
-		pthread_mutex_unlock(&data->stop_mutex);
-		usleep(50);
-		pthread_mutex_lock(&data->stop_mutex);
-	}
-	pthread_mutex_unlock(&data->stop_mutex);
+	wait_for_simulation_start(data);
+	if (has_simulation_stopped(data))
+		return (NULL);
 	if (data->num_philos == 1)
 	{
 		pthread_mutex_lock(philo->first_fork);

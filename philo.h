@@ -51,6 +51,7 @@ long long	get_time_in_ms(void);
 void		precise_usleep(long long milliseconds);
 void		print_state(t_philo *philo, const char *status);
 bool		has_simulation_stopped(t_data *data);
+void		wait_for_simulation_start(t_data *data);
 
 /* lifecycle.c */
 void		*philosopher_routine(void *arg);

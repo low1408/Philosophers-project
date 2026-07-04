@@ -47,6 +47,18 @@ bool	has_simulation_stopped(t_data *data)
 	return (stopped);
 }
 
+void	wait_for_simulation_start(t_data *data)
+{
+	pthread_mutex_lock(&data->stop_mutex);
+	while (!data->simulation_started && !data->simulation_stopped)
+	{
+		pthread_mutex_unlock(&data->stop_mutex);
+		usleep(50);
+		pthread_mutex_lock(&data->stop_mutex);
+	}
+	pthread_mutex_unlock(&data->stop_mutex);
+}
+
 void	print_state(t_philo *philo, const char *status)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
